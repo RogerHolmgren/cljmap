@@ -7,24 +7,22 @@
     ))
 
 
-(defn display-user [{:keys [id avatar email] first-name :first_name}]
-  [:div.horizontal {:key id}
-   [:img.pr-15 {:src avatar}]
-   [:div
-    [:h2 first-name]
-    [:p  (str "(" email ")")]]])
+(defn display-features [{my-type :type geo :geometry}]
+  (.log js/console (str "dat: " geo))
+  [:div
+   [:p (str "Type: " my-type)]
+   [:p (str "geo-type: " (:type geo))]
+   [:p (str "geo-coord: " (:coordinates geo))]
+   ])
 
 (defn main-panel []
-  (let [name (rf/subscribe [::subs/name])
-        users (rf/subscribe [::subs/users])]
+  (let [data (rf/subscribe [::subs/data])]
     [:div
-     [:h1
-      "Hello from " @name "!!!!"]
+     [:h1 "Geo data title"]
      [:div 
-      [:p "Paragraph"]
-      (map display-user @users)
-      [:button {:on-click #(rf/dispatch [::events/fetch-users])} "Make API Call"]
-      [:button {:on-click #(rf/dispatch [::events/update-name "Kalle"])} "Update name"]
+      (.log js/console (str "Data: >>>>> " @data))
+      (map display-features (:features @data))
+      [:button {:on-click #(rf/dispatch [::events/fetch-geodata])} "Get geo-data"]
       ]
      ]))
 

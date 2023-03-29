@@ -1,4 +1,4 @@
 (ns cljmap.components)
 
-(declare *maps*)
+; (declare *maps*)
 

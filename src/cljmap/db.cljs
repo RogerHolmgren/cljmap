@@ -1,5 +1,6 @@
-(ns cljmap.db)
+(ns cljmap.db
+  (:require [cljmap.data :as data]))
 
 (def default-db
-  {:name "re-frame"})
+  {:data data/my-data})
 

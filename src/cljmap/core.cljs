@@ -4,9 +4,7 @@
    [re-frame.core :as re-frame]
    [cljmap.events :as events]
    [cljmap.views :as views]
-   [cljmap.config :as config]
-   ))
-
+   [cljmap.config :as config]))
 
 (defn dev-setup []
   (when config/debug?
