@@ -47,12 +47,6 @@ you.
 [github actions](https://github.com/features/actions) pipelines.
   - [`test.yaml`](.github/workflows/test.yaml): Pipeline for testing.
 
-
-### Editor/IDE
-
-Use your preferred editor or IDE that supports Clojure/ClojureScript development. See
-[Clojure tools](https://clojure.org/community/resources#_clojure_tools) for some popular options.
-
 ### Environment Setup
 
 1. Install [JDK 8 or later](https://openjdk.java.net/install/) (Java Development Kit)

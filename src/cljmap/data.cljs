@@ -12,7 +12,76 @@
           55.70037360320053
         ]
       },
-      \"properties\": { \"address\": \"Dalbyvägen\" }
+      \"properties\": {
+        \"address\": \"Dalbyvägen\",
+        \"worktypes\": [],
+        \"end-date\": \"2023-04-14\",
+        \"estimated-effects\": {
+          \"1\": {
+            \"id\": \"1\",
+            \"name\": \"Smalare körfält\",
+            \"order\": 1
+          },
+          \"gc-road\": {
+            \"id\": \"gc-road\",
+            \"name\": \"GC-väg\",
+            \"order\": 4
+          },
+          \"halv-vb\": {
+            \"id\": \"halv-vb\",
+            \"name\": \"Halva vägbanan\",
+            \"order\": 7
+          },
+          \"other\": {
+            \"id\": \"other\",
+            \"name\": \"Annat\",
+            \"order\": 99
+          }
+        },
+        \"name\": \"20210503-0908\",
+        \"type\": \"ta\",
+        \"estimated-traffic-effect\": \"2\",
+        \"status\": \"Ärende - Nytt\",
+        \"link\": \"\",
+        \"comment\": \"Generell TA-plan för trädarbeten utmed väg och/eller GC-bana\",
+        \"applicant\": \"Svearb AB\",
+        \"start-date\": \"2023-04-14\"
+      }
+    },
+    {
+      \"type\": \"Feature\",
+      \"geometry\": {
+        \"type\": \"Point\",
+        \"coordinates\": [
+          13.218017977459503,
+          55.72697781014705
+        ]
+      },
+      \"properties\": {
+        \"address\": \"Generell AT-plan för Målning Handläggning\",
+        \"worktypes\": [],
+        \"end-date\": \"2023-12-29\",
+        \"estimated-effects\": {
+          \"2\": {
+            \"id\": \"2\",
+            \"name\": \"Ett körfält avstängt\",
+            \"order\": 2
+          },
+          \"halv-vb\": {
+            \"id\": \"halv-vb\",
+            \"name\": \"Halva vägbanan\",
+            \"order\": 7
+          }
+        },
+        \"name\": \"20221005-2317\",
+        \"type\": \"ta\",
+        \"estimated-traffic-effect\": \"2\",
+        \"status\": \"Ärende - Nytt\",
+        \"link\": \"\",
+        \"comment\": \"\",
+        \"applicant\": \"Svevia AB\",
+        \"start-date\": \"2022-10-17\"
+      }
     }
   ]
 }")
