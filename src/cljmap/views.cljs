@@ -1,7 +1,8 @@
 (ns cljmap.views
   (:require
     [re-frame.core :as rf]
-    ; [reagent.core :as reagent]
+    [reagent.core :as reagent]
+    [reagent.dom :as rdom]
     [cljmap.events :as events]
     [cljmap.subs :as subs]
     ))
@@ -36,10 +37,27 @@
    [:ul (map to-prop-list props)]
    ])
 
+; --- maps
+(defn map-div []
+  [:div {:style {:height "300px"}}
+   ])
+
+(defn the-map [this]
+  (let [map-canvas (rdom/dom-node this)
+        map-options (clj->js {"center" (js/google.maps.LatLng. -34.397, 150.644)
+                              "zoom" 8})]
+    (js/google.maps.Map. map-canvas map-options)))
+
+(defn map-component []
+  (reagent/create-class {:reagent-render map-div
+                         :component-did-mount the-map}))
+; ---
+
 (defn main-panel []
   (let [data (rf/subscribe [::subs/data])]
     [:div
      [:h1 "Geo data title"]
+     [map-component]
      [:div 
       (.log js/console (str "Data: >>>>> " @data))
       (map display-features (:features @data))
