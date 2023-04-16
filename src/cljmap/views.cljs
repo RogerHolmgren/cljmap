@@ -7,9 +7,6 @@
     [cljmap.subs :as subs]
     ))
 
-(defn count-prop-types [props]
-  )
-
 (defn val-or-popup [v]
   (if (map? v)
     [:a "get details"]
@@ -23,11 +20,6 @@
     [:li {:key k} (str k ": ") (val-or-popup v)]
     ))
 
-(map to-prop-list {:key1 "val1" :key2 {:a "a"}})
-
-(map? {"oaeu" "oaeu"})
-(if true (val-or-popup "aueo") "bla")
-
 (defn display-features [{my-type :type geo :geometry props :properties}]
   ; (.log js/console (str "Props: " (get-props props)))
   [:div {:key (:name props)}
@@ -38,26 +30,43 @@
    ])
 
 ; --- maps
-(defn map-div []
-  [:div {:style {:height "300px"}}
-   ])
+(defn gmap-component []
+  (let [gmap    (atom nil)
+        options (clj->js {"zoom" 9})
+        update  (fn [comp]
+                  (let [{:keys [latitude longitude]} (reagent/props comp)
+                        latlng (js/google.maps.LatLng. latitude longitude)]
+                    (.setPosition (:marker @gmap) latlng)
+                    (.panTo (:map @gmap) latlng)
+                    ))]
 
-(defn the-map [this]
-  (let [map-canvas (rdom/dom-node this)
-        map-options (clj->js {"center" (js/google.maps.LatLng. -34.397, 150.644)
-                              "zoom" 8})]
-    (js/google.maps.Map. map-canvas map-options)))
+    (reagent/create-class
+      {:reagent-render (fn []
+                         [:div
+                          [:h4 "Map"]
+                          [:div#map-canvas {:style {:height "400px"}}]])
 
-(defn map-component []
-  (reagent/create-class {:reagent-render map-div
-                         :component-did-mount the-map}))
+       :component-did-mount (fn [comp]
+                              (let [canvas  (.getElementById js/document "map-canvas")
+                                    gm      (js/google.maps.Map. canvas options)
+                                    marker  (js/google.maps.Marker. (clj->js {:map gm :title "Drone"}))]
+                                (reset! gmap {:map gm :marker marker}))
+                              (update comp))
+
+       :component-did-update update
+       :display-name "gmap-component"})))
+
+(defn gmap-wrapper []
+  (let [pos (rf/subscribe [:current-position])]
+    (fn []
+      [gmap-component @pos])))
 ; ---
 
 (defn main-panel []
   (let [data (rf/subscribe [::subs/data])]
     [:div
      [:h1 "Geo data title"]
-     [map-component]
+     [gmap-wrapper]
      [:div 
       (.log js/console (str "Data: >>>>> " @data))
       (map display-features (:features @data))
@@ -65,3 +74,8 @@
       ]
      ]))
 
+(comment
+  (map? {"oaeu" "oaeu"})
+  (if true (val-or-popup "aueo") "bla")
+  (map to-prop-list {:key1 "val1" :key2 {:a "a"}})
+  )
