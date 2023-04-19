@@ -33,9 +33,11 @@
 (defn gmap-component []
   (let [gmap    (atom nil)
         options (clj->js {"zoom" 9})
-        update  (fn [comp]
-                  (let [{:keys [latitude longitude]} (reagent/props comp)
+       update  (fn [component-data]
+                  (let [{:keys [latitude longitude]} (reagent/props component-data)
                         latlng (js/google.maps.LatLng. latitude longitude)]
+                    ; (.log js/console "comp")
+                    ; (.log js/console (reagent/props component-data))
                     (.setPosition (:marker @gmap) latlng)
                     (.panTo (:map @gmap) latlng)
                     ))]
@@ -56,10 +58,15 @@
        :component-did-update update
        :display-name "gmap-component"})))
 
+(let [{:keys [latitude longitude]} {:latitude 57 :longitude 15}]
+  (str latitude ":" longitude)
+  )
+
 (defn gmap-wrapper []
-  (let [pos (rf/subscribe [:current-position])]
+  (let [pos (rf/subscribe [::subs/current-position])]
     (fn []
-      [gmap-component @pos])))
+      (.log js/console @pos)
+      [gmap-component {:latitude 57 :longitude 15}])))
 ; ---
 
 (defn main-panel []
@@ -68,7 +75,7 @@
      [:h1 "Geo data title"]
      [gmap-wrapper]
      [:div 
-      (.log js/console (str "Data: >>>>> " @data))
+      ; (.log js/console (str "Data: >>>>> " (:features @data)))
       (map display-features (:features @data))
       [:button {:on-click #(rf/dispatch [::events/fetch-geodata])} "Get geo-data"]
       ]

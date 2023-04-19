@@ -8,7 +8,7 @@
     (:data db)))
 
 (rf/reg-sub
-  :current-position
+  ::current-position
   (fn []
-    (:data {:latitude 123})))
+    (:data {:latitude 57 :longitude 15})))
 
