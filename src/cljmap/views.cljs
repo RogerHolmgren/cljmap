@@ -1,10 +1,10 @@
 (ns cljmap.views
   (:require
-   [cljmap.events :as events]
-   [cljmap.gmap :refer [gmap-wrapper]]
-   [cljmap.subs :as subs]
-   [re-frame.core :as rf]
-   [reagent.core :as reagent]))
+    [cljmap.events :as events]
+    [cljmap.gmap :refer [gmap-wrapper]]
+    [cljmap.subs :as subs]
+    [re-frame.core :as rf]
+    [reagent.core :as reagent]))
 
 (def click-count (reagent/atom 0))
 
@@ -42,8 +42,8 @@
      [:h1 "Geo data title"]
      (counting-component)
      [gmap-wrapper]
-     (map display-features (:features @data))
-     [:button {:on-click #(rf/dispatch [::events/fetch-geodata])} "Get geo-data"]
+     ; (map display-features (:features @data))
+     [:button {:on-click #(rf/dispatch [::events/fetch-geodata])} "Update map"]
      ]))
 
 (comment

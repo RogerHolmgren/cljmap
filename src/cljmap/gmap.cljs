@@ -5,17 +5,22 @@
     [cljmap.subs :as subs]
     ))
 
+(defn getLatLng [feature]
+  (let [coord (get-in feature [:geometry :coordinates])]
+    (js/google.maps.LatLng. (second coord) (first coord))))
 
 (defn gmap-component []
   (let [gmap    (atom nil)
         options (clj->js {"zoom" 9})
-       update  (fn [component-data]
-                  (let [{:keys [latitude longitude]} (reagent/props component-data)
-                        latlng (js/google.maps.LatLng. latitude longitude)]
-                    ; (.log js/console "comp")
-                    ; (.log js/console (reagent/props component-data))
-                    (.setPosition (:marker @gmap) latlng)
-                    (.panTo (:map @gmap) latlng)
+        update  (fn [component-data]
+                  (let [{:keys [type features]} (reagent/props component-data)]
+
+                    (.log js/console (str "Type: " type))
+                    (.log js/console (str "Features: " features))
+                    (.log js/console (str "Geo: " (getLatLng (first features))))
+
+                    (.setPosition (:marker @gmap) (getLatLng (first features)))
+                    (.panTo (:map @gmap) (getLatLng (first features)))
                     ))]
 
     (reagent/create-class
@@ -24,12 +29,12 @@
                           [:h4 "Map"]
                           [:div#map-canvas {:style {:height "400px"}}]])
 
-       :component-did-mount (fn [comp]
+       :component-did-mount (fn [component-data]
                               (let [canvas  (.getElementById js/document "map-canvas")
                                     gm      (js/google.maps.Map. canvas options)
                                     marker  (js/google.maps.Marker. (clj->js {:map gm :title "Drone"}))]
                                 (reset! gmap {:map gm :marker marker}))
-                              (update comp))
+                              (update component-data))
 
        :component-did-update update
        :display-name "gmap-component"})))
@@ -39,7 +44,8 @@
   )
 
 (defn gmap-wrapper []
-  (let [pos (rf/subscribe [::subs/current-position])]
+  (let [features (rf/subscribe [::subs/data])]
     (fn []
-      (.log js/console @pos)
-      [gmap-component {:latitude 57 :longitude 15}])))
+      ; (.log js/console @features)
+      [gmap-component @features])))
+
