@@ -1,20 +1,9 @@
-(ns cljmap.views
+  (ns cljmap.views
   (:require
     [cljmap.events :as events]
     [cljmap.gmap :refer [gmap-wrapper]]
     [cljmap.subs :as subs]
-    [re-frame.core :as rf]
-    [reagent.core :as reagent]))
-
-(def click-count (reagent/atom 0))
-
-(defn counting-component []
-  [:div
-   "The atom " [:code "click-count"] " has value: " @click-count ". "
-   [:input {:type "button" 
-            :value "Click me!"
-            :on-click #(swap! click-count inc)}]]
-  )
+    [re-frame.core :as rf]))
 
 (defn val-or-popup [v]
   (if (map? v)
@@ -40,10 +29,10 @@
   (let [data (rf/subscribe [::subs/data])]
     [:div
      [:h1 "Geo data title"]
-     (counting-component)
      [gmap-wrapper]
      ; (map display-features (:features @data))
      [:button {:on-click #(rf/dispatch [::events/fetch-geodata])} "Update map"]
+     [:button {:on-click #(rf/dispatch [::events/fetch-geodata])} "Update map2"]
      ]))
 
 (comment
