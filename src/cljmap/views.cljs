@@ -1,4 +1,4 @@
-  (ns cljmap.views
+(ns cljmap.views
   (:require
     [cljmap.events :as events]
     [cljmap.gmap :refer [gmap-wrapper]]
@@ -31,8 +31,8 @@
      [:h1 "Geo data title"]
      [gmap-wrapper]
      ; (map display-features (:features @data))
-     [:button {:on-click #(rf/dispatch [::events/fetch-geodata])} "Update map"]
-     [:button {:on-click #(rf/dispatch [::events/fetch-geodata])} "Update map2"]
+     [:button {:on-click #(rf/dispatch [::events/fetch-geodata 1])} "Update map"]
+     [:button {:on-click #(rf/dispatch [::events/fetch-geodata 2])} "Update map2"]
      ]))
 
 (comment

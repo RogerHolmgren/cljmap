@@ -2,5 +2,5 @@
   (:require [cljmap.data :as data]))
 
 (def default-db           ;; This gets loaded into app-db by default
-  {:data data/my-data})
+  {:data (js->clj data/my-data :keywordize-keys true)})
 

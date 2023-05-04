@@ -9,6 +9,9 @@
   (let [coord (get-in feature [:geometry :coordinates])]
     (js/google.maps.LatLng. (second coord) (first coord))))
 
+(defn create-marker [name latlng]
+  (js/google.maps.Marker. (clj->js {"position" latlng "title" name})))
+
 (defn gmap-component []
   (let [gmap    (atom nil)
         options (clj->js {"zoom" 9})
@@ -19,7 +22,9 @@
                     (.log js/console (str "Features: " features))
                     (.log js/console (str "Geo: " (getLatLng (first features))))
 
+                    ; (.setMap (:marker @gmap) (create-marker "hello" (getLatLng (second features))))
                     (.setPosition (:marker @gmap) (getLatLng (first features)))
+                    ; (.setPosition (:marker @gmap) (getLatLng (second features)))
                     (.panTo (:map @gmap) (getLatLng (first features)))
                     ))]
 
