@@ -28,7 +28,7 @@
         options (clj->js {"zoom" 12})
         update  (fn [component-data]
                   (let [{:keys [type features]} (reagent/props component-data)
-                        mark (create-marker (:map @gmap) "hello1" (getLatLng (first features)))
+                        mark (create-marker @gmap "hello1" (getLatLng (first features)))
                         ]
 
                     ; (.log js/console (str "Type: " type))
@@ -37,24 +37,22 @@
                     ; TODO: Use a markerCluster?
                     (doseq [f features]
                       (.log js/console (str "Feature in doseq: " f))
-                      (.setMap (create-marker2 (:map @gmap) f) (:map @gmap))
+                      (.setMap (create-marker2 @gmap f) @gmap)
                       )
 
                     ; (.addListener mark)
                     ; (.setPosition mark (getLatLng (first features)))
 
-                    ; (.log js/console (str "Marker from maps " (.getPosition ^js (:marker @gmap))))
+                    ; (.log js/console (str "Marker from maps " (.getPosition ^js @gmap)))
 
-                    (.panTo ^js (:map @gmap) (getLatLng (first features)))
+                    (.panTo ^js @gmap (getLatLng (first features)))
                     ))]
 
     (reagent/create-class
       {:reagent-render map-render
        :component-did-mount (fn [component-data]
-                              (let [canvas  (.getElementById js/document "map-canvas")
-                                    gm      (js/google.maps.Map. canvas options)
-                                    marker  (js/google.maps.Marker. (clj->js {:map gm :title "Drone"}))]
-                                (reset! gmap {:map gm :marker marker}))
+                              (let [canvas  (.getElementById js/document "map-canvas")]
+                                (reset! gmap (js/google.maps.Map. canvas options)))
                               (update component-data))
 
        :component-did-update update
