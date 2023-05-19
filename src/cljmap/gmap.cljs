@@ -47,13 +47,6 @@
        :component-did-update update
        :display-name "gmap-component"})))
 
-(defn add-stuff [locations]
-  (doseq [i (range (count locations))]
-    (let [marker (js/google.maps.Marker.
-                   (js/google.maps.LatLng. (get-in locations [i 1]) (get-in locations [i 2]))
-                   {:map map})]
-      (js/google.maps.addListener marker "click"))))
-
 (defn gmap-wrapper []
   (let [features (rf/subscribe [::subs/mapFeatures])]
     (fn []

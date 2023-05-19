@@ -3,8 +3,7 @@
    [cljmap.events :as events]
    [cljmap.gmap :refer [gmap-wrapper]]
    [cljmap.subs :as subs]
-   [re-frame.core :as rf]
-   [reagent.core :as reagent]))
+   [re-frame.core :as rf]))
 
 (defn val-or-popup [v]
   (if (map? v)
@@ -16,21 +15,6 @@
          v (val prop)]
     [:li {:key k} (str k ": ") (val-or-popup v)]
     ))
-
-(defn counting-button [txt]
-  (let [state (reagent/atom 0)] ;; state is accessible in the render function
-    (fn [txt]
-      [:button.button
-       {:on-click #(swap! state inc)}
-       (str txt " " @state)])))
-
-(defn display-features [{my-type :type geo :geometry props :properties}]
-  [:div {:key (:name props)}
-   [:p (str "Type: " my-type)]
-   [:p (str "geo-type: " (:type geo))]
-   [:p (str "geo-coord: " (:coordinates geo))]
-   [:ul (map to-prop-list props)]
-   ])
 
 ;---- Form ----
 (def animal-types ["Dog" "Cat" "Mouse"])
@@ -71,7 +55,6 @@
    [:div.section
     [:button.button {:on-click #(rf/dispatch [::events/fetch-geodata 1])} "Update map"]
     [:button.button {:on-click #(rf/dispatch [::events/fetch-geodata 2])} "Update map2"]
-    [counting-button "My button"]
     ]
    [:div.section
     [:h1.title "Update form"]
