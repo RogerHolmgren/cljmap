@@ -7,7 +7,7 @@
 
 (defn getLatLng [feature]
   (let [coord (get-in feature [:geometry :coordinates])]
-      (.log js/console (str "coord: " coord))
+    (.log js/console (str "coord: " coord))
     (js/google.maps.LatLng. (second coord) (first coord))))
 
 (defn create-marker [map name latlng]
@@ -27,23 +27,12 @@
   (let [gmap    (atom nil)
         options (clj->js {"zoom" 12})
         update  (fn [component-data]
-                  (let [{:keys [type features]} (reagent/props component-data)
-                        mark (create-marker @gmap "hello1" (getLatLng (first features)))
-                        ]
-
-                    ; (.log js/console (str "Type: " type))
-                    ; (.log js/console (str "Features: " features))
-
+                  (let [{:keys [features]} (reagent/props component-data)]
                     ; TODO: Use a markerCluster?
                     (doseq [f features]
                       (.log js/console (str "Feature in doseq: " f))
-                      (.setMap (create-marker2 @gmap f) @gmap)
+                      (.addListener (create-marker2 @gmap f) @gmap)
                       )
-
-                    ; (.addListener mark)
-                    ; (.setPosition mark (getLatLng (first features)))
-
-                    ; (.log js/console (str "Marker from maps " (.getPosition ^js @gmap)))
 
                     (.panTo ^js @gmap (getLatLng (first features)))
                     ))]
@@ -60,10 +49,10 @@
 
 (defn add-stuff [locations]
   (doseq [i (range (count locations))]
-  (let [marker (js/google.maps.Marker.
-                 (js/google.maps.LatLng. (get-in locations [i 1]) (get-in locations [i 2]))
-                 {:map map})]
-    (js/google.maps.addListener marker "click"))))
+    (let [marker (js/google.maps.Marker.
+                   (js/google.maps.LatLng. (get-in locations [i 1]) (get-in locations [i 2]))
+                   {:map map})]
+      (js/google.maps.addListener marker "click"))))
 
 (defn gmap-wrapper []
   (let [features (rf/subscribe [::subs/mapFeatures])]
