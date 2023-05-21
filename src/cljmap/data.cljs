@@ -1,6 +1,6 @@
 (ns cljmap.data)
 
-(def json-input "{
+(def json-input1 "{
   \"type\": \"FeatureCollection\",
   \"features\": [
     {
@@ -86,7 +86,7 @@
   ]
 }")
 
-(def json-input-bak
+(def json-input
 "{
   \"type\": \"FeatureCollection\",
   \"features\": [

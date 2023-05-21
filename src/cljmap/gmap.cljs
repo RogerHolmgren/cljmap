@@ -5,18 +5,17 @@
     [cljmap.subs :as subs]
     ))
 
+(def max-markers 20)
+
 (defn getLatLng [feature]
   (let [coord (get-in feature [:geometry :coordinates])]
     (.log js/console (str "coord: " coord))
     (js/google.maps.LatLng. (second coord) (first coord))))
 
-(defn create-marker [map name latlng]
-  (js/google.maps.Marker. (clj->js {:map map :position latlng :title name})))
-
-(defn create-marker2 [map feature]
+(defn create-marker [map feature]
   (let [latlng (getLatLng feature)
-        markerName "aoeu"]
-    (create-marker map markerName latlng)))
+        name (get-in [:properties :name] feature)]
+    (js/google.maps.Marker. (clj->js {:map map :position latlng :title name}))))
 
 (defn map-render []
   [:div
@@ -29,9 +28,9 @@
         update  (fn [component-data]
                   (let [{:keys [features]} (reagent/props component-data)]
                     ; TODO: Use a markerCluster?
-                    (doseq [f features]
+                    (doseq [f (take max-markers features)]
                       (.log js/console (str "Feature in doseq: " f))
-                      (.addListener (create-marker2 @gmap f) @gmap)
+                      (.addListener (create-marker @gmap f) @gmap)
                       )
 
                     (.panTo ^js @gmap (getLatLng (first features)))
