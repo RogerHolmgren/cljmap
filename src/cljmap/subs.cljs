@@ -5,12 +5,12 @@
 (rf/reg-sub
   ::mapFeatures
   (fn [db]
-    (:mapData db)))
+    db))
 
-; (rf/reg-sub
-;   ::current-position
-;   (fn []
-;     (:data {:latitude 57 :longitude 15})))
+(rf/reg-sub
+  ::filtered-features
+  (fn [db]
+    (:mapData db)))
 
 (rf/reg-sub
   ::form

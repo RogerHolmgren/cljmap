@@ -1,9 +1,9 @@
 (ns cljmap.views
   (:require
-   [cljmap.events :as events]
-   [cljmap.gmap :refer [gmap-wrapper]]
-   [cljmap.subs :as subs]
-   [re-frame.core :as rf]))
+    [cljmap.events :as events]
+    [cljmap.gmap :refer [gmap-wrapper]]
+    [cljmap.subs :as subs]
+    [re-frame.core :as rf]))
 
 (defn val-or-popup [v]
   (if (map? v)
@@ -51,10 +51,10 @@
   [:div.section
    [:h1.title "Geo data title"]
    [gmap-wrapper]
-   ; (map display-features (:features @data))
    [:div.section
-    [:button.button {:on-click #(rf/dispatch [::events/fetch-geodata 1])} "Update map"]
-    [:button.button {:on-click #(rf/dispatch [::events/fetch-geodata 2])} "Update map2"]
+    [:button.button {:on-click #(rf/dispatch [::events/put-filter 4])} "Update map 4"]
+    [:button.button {:on-click #(rf/dispatch [::events/put-filter 8])} "Update map 8"]
+    ; [:button.button {:on-click #(rf/dispatch [::events/fetch-geodata 2])} "Update map2"]
     ]
    [:div.section
     [:h1.title "Update form"]

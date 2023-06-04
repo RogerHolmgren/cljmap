@@ -1,4 +1,6 @@
-(ns cljmap.data)
+(ns cljmap.data
+  ; (:require [clojure.data.json :as json])
+  )
 
 (def json-input1 "{
   \"type\": \"FeatureCollection\",
@@ -9086,3 +9088,10 @@
 
 (def my-data (.parse js/JSON json-input))
 
+; (def feats (:features (json/read-str json-input :key-fn keyword)))
+;
+; (get-in (first feats) [:properties :type])
+;
+; (count feats)
+; (count (filter #(= (get-in % [:properties :type]) "ta") feats))
+;
