@@ -41,8 +41,10 @@
                       (.addListener m @gmap)
                       )
 
-                    (when focused-feature
-                      (.panTo ^js @gmap (getLatLng focused-feature)))
+                    (if focused-feature
+                      (.panTo ^js @gmap (getLatLng focused-feature))
+                      (.panTo ^js @gmap (getLatLng (first mapData)))
+                      )
                     ))]
 
     (reagent/create-class
