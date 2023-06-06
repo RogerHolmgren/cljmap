@@ -29,37 +29,6 @@
      ]
     ))
 
-;---- Form ----
-(def animal-types ["Dog" "Cat" "Mouse"])
-
-(defn text-input [id label]
-  (let [value (rf/subscribe [::subs/form id])]
-    [:div.field
-     [:label.label label]
-     [:div.control
-      [:input.input {:value @value
-                     :on-change #(rf/dispatch [::events/update-form id (-> % .-target .-value)])
-                     :type "text" :placeholder "Text input"}]]]))
-
-(defn select-input [id label options]
-  (let [value (rf/subscribe [::subs/form id])]
-    [:div.field
-     [:label.label label]
-     [:div.control
-      [:div.select
-       [:select {:value @value
-                 :on-change #(rf/dispatch [::events/update-form id (-> % .-target .-value)])}
-        [:option {:value ""} "Please select"]
-        (map (fn [o] [:option {:key o :value o} o]) options)
-        ]]]]))
-
-(defn save-button []
-  (let [is-valid? @(rf/subscribe [::subs/form-is-valid? [:animal-name :animal-type]])]
-    [:button.button.is-primary {:disabled (not is-valid?)
-                                :on-click #(rf/dispatch [::events/save-form])} "Save"]
-    ))
-;--------------
-
 (defn main-panel []
   [:div.section
    [:h1.title "Geo data title"]
@@ -68,14 +37,8 @@
    [:div.section
     [:button.button {:on-click #(rf/dispatch [::events/put-filter 4])} "Simple filter 4"]
     [:button.button {:on-click #(rf/dispatch [::events/put-filter 8])} "Simple filter 8"]
-    ; [:button.button {:on-click #(rf/dispatch [::events/fetch-geodata 2])} "Update map2"]
     ]
-   [:div.section
-    [:h1.title "Update form"]
-    [text-input :animal-name "Animal Name"]
-    [select-input :animal-type "Animal Type" animal-types]
-    [save-button]
-    ]])
+   ])
 
 (comment
   (if true (val-or-popup "aueo") "bla")
