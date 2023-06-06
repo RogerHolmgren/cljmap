@@ -26,6 +26,10 @@
       ; (.log js/console db)
       (assoc db :my-filter number))))
 
+(rf/reg-event-db
+  ::focus-marker
+  (fn [db [_ id]]
+    (assoc db :focused-feature id)))
 
 
 (rf/reg-event-db

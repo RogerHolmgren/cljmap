@@ -29,7 +29,7 @@
         markers (atom {})
         options (clj->js {"zoom" 12})
         update  (fn [this]
-                  (let [{:keys [ mapData my-filter ]} (reagent/props this)]
+                  (let [{:keys [ mapData my-filter focused-feature ]} (reagent/props this)]
                     ; (.log js/console (str "Features " mapData))
                     (clear-markers-from-map @markers)
 
@@ -41,8 +41,8 @@
                       (.addListener m @gmap)
                       )
 
-                    (when (seq @markers)
-                      (.panTo ^js @gmap (.getPosition ^js (first @markers))))
+                    (when focused-feature
+                      (.panTo ^js @gmap (getLatLng focused-feature)))
                     ))]
 
     (reagent/create-class
@@ -59,5 +59,6 @@
   (let [features (rf/subscribe [::subs/mapFeatures])]
     (fn []
       ; (.log js/console (str (first @features)))
-      [gmap-component @features])))
+      [gmap-component @features]
+      )))
 
