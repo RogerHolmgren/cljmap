@@ -7,7 +7,6 @@
 
 (defn getLatLng [feature]
   (let [coord (get-in feature [:geometry :coordinates])]
-    ; (.log js/console (str "coord: " coord))
     (js/google.maps.LatLng. (second coord) (first coord))))
 
 (defn create-marker [map feature]
@@ -17,8 +16,7 @@
 
 (defn map-render []
   [:div
-   [:h4 "Map"]
-   [:div#map-canvas {:style {:height "400px" :width "600px"}}]])
+   [:div#map-canvas {:style {:height "500px" :width "700px"}}]])
 
 (defn clear-markers-from-map [markers]
   (doseq [m markers]
@@ -27,16 +25,19 @@
 (defn gmap-component []
   (let [gmap    (atom nil)
         markers (atom {})
-        options (clj->js {"zoom" 12})
+        options (clj->js {"zoom" 11})
         update  (fn [this]
                   (let [{:keys [ mapData my-filter focused-feature ]} (reagent/props this)]
-                    ; (.log js/console (str "Features " mapData))
                     (clear-markers-from-map @markers)
 
-                    (reset! markers (map #(create-marker @gmap %) (take my-filter mapData)))
+                    (reset! markers (if-let [{:keys [type estimated-traffic-effect]} my-filter]
+                                      (map #(create-marker @gmap %)
+                                           (filter #(and (= type (get-in % [:properties :type]))
+                                                         (= estimated-traffic-effect (get-in % [:properties :estimated-traffic-effect]))
+                                                         ) mapData))
+                                      (map #(create-marker @gmap %) mapData)))
 
                     (doseq [m @markers]
-                      ; (.log js/console (str "Feature to add " (.getTitle ^js m)))
                       (.setMap ^js m @gmap)
                       (.addListener m @gmap)
                       )

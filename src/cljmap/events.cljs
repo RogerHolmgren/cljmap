@@ -8,7 +8,7 @@
 (rf/reg-event-db
   ::initialize-db
   (fn [db [_ _]]
-    (assoc db :mapData db/default-db :my-filter 1)))
+    (assoc db :mapData db/default-db)))
 
 "This should be a REST-call to 'https://lund.panorama-gis.se/api/v1/public/objects'"
 (rf/reg-event-db
@@ -18,13 +18,14 @@
     (assoc db :mapData db/default-db)))
 
 (rf/reg-event-db
-  ::put-filter
-  (fn [db [_ number]]
-    (let [filtered-features (filter #(= (get-in % [:mapData :properties :type]) "ta") db)]
-      ; (.log js/console (count filtered-features))
-      ; (.log js/console (get-in db [:mapData :features]))
-      ; (.log js/console db)
-      (assoc db :my-filter number))))
+  ::clear-filter
+  (fn [db [_ _]]
+    (dissoc db :my-filter)))
+
+(rf/reg-event-db
+  ::put-type-filter
+  (fn [db [_ _]]
+    (assoc db :my-filter {:type "ta" :estimated-traffic-effect "3"})))
 
 (rf/reg-event-db
   ::focus-marker

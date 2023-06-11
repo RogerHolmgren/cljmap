@@ -7,11 +7,16 @@
 
 (defn feature-list []
   (let [{:keys [ mapData my-filter ]} @(rf/subscribe [::subs/mapFeatures])]
-    [:div
-     [:p (str "My filter: " my-filter)]
-
-     (for [m (take (int my-filter) mapData)]
-       [:button.button {:key (get-in m [:properties :name])
+    [:div {:style {:overflow-y "auto" :max-height "520px" :width "300px" :margin-left "30px"}}
+     (for [m 
+           (if-let [{:keys [ type estimated-traffic-effect ]} my-filter]
+             (filter #(and (= type (get-in % [:properties :type]))
+                           (= estimated-traffic-effect (get-in % [:properties :estimated-traffic-effect])))
+                     mapData)
+             mapData)
+           ]
+       [:button.button {:style {:width "250"}
+                        :key (get-in m [:properties :name])
                         :on-click #(rf/dispatch [::events/focus-marker m])
                         } (str (get-in m [:properties :name]))]
        )
@@ -21,11 +26,13 @@
 (defn main-panel []
   [:div.section
    [:h1.title "Geo data title"]
-   [gmap-wrapper]
-   [feature-list]
+   [:div {:style {:display "flex"}}
+    [gmap-wrapper]
+    [feature-list]
+    ]
    [:div.section
-    [:button.button {:on-click #(rf/dispatch [::events/put-filter 4])} "Simple filter 4"]
-    [:button.button {:on-click #(rf/dispatch [::events/put-filter 8])} "Simple filter 8"]
+    [:button.button {:on-click #(rf/dispatch [::events/put-type-filter {:type "ta" :estimated-traffic-effect 3}])} "Filter for type \"ta\""]
+    [:button.button {:on-click #(rf/dispatch [::events/clear-filter])} "Clear filter"]
     ]
    ])
 
