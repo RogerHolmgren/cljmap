@@ -15,10 +15,16 @@
                      mapData)
              mapData)
            ]
-       [:button.button {:style {:width "250"}
-                        :key (get-in m [:properties :name])
-                        :on-click #(rf/dispatch [::events/focus-marker m])
-                        } (str (get-in m [:properties :name]))]
+       [:div {:style {:border "2px outset black"
+                      :margin "2px"
+                      :background-color "lightgrey"
+                      :width "96"}
+              :key (get-in m [:properties :name])
+              :on-click #(rf/dispatch [::events/focus-marker m])
+              } 
+        [:p (get-in m [:properties :name])]
+        [:p (get-in m [:properties :address])]
+        ]
        )
      ]
     ))
